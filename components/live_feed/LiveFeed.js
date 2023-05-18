@@ -24,7 +24,7 @@ const countActivityPerDates = (activities, dates, array_count) => {
                 activity_start.getDate() - date == 0 &&
                 activity_start.getHours() - hours == 0 &&
                 activity_start.getMinutes() - minutes == 0 &&
-                activity_start.getSeconds() - seconds <= 2
+                activity_start.getSeconds() - seconds <= 10
             ) {
                 arr[i] += 1;
             }
@@ -38,7 +38,7 @@ const createActivityChart = (walking, running, cycling) => {
     const date = new Date();
     for (let i = 0; i < 30; i++) {
         dates.push(date.toLocaleTimeString());
-        date.setSeconds(date.getSeconds() - 5);
+        date.setSeconds(date.getSeconds() - 10);
     }
     dates = dates.reverse();
     let walking_data = countActivityPerDates(walking, dates, 30);
