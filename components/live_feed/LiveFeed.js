@@ -26,14 +26,14 @@ const countActivityPerDates = (activities, dates, array_count) => {
                 activity_start.getMinutes() - minutes == 0 &&
                 activity_start.getSeconds() - seconds <= 10
             ) {
-                arr[i] += 1;
+                arr[i] += activity.total_num_steps;
             }
         }
     });
     return arr;
 };
 
-const createActivityChart = (walking, running, cycling) => {
+const createStepChart = (walking, running, cycling) => {
     let dates = [];
     const date = new Date();
     for (let i = 0; i < 30; i++) {
@@ -250,7 +250,7 @@ const LiveFeed = () => {
                 cycling_object = createEmptyActivityObject();
             }
             /* Chart */
-            createActivityChart(walking_object, running_object, cycling_object);
+            createStepChart(walking_object, running_object, cycling_object);
             /* Activity data */
             setActivityData({
                 walking: walking_object,
@@ -263,7 +263,6 @@ const LiveFeed = () => {
                 running_object,
                 cycling_object
             );
-            console.log(latest_activity);
             if (latest_activity == 0) {
                 setIsIdle(true);
                 setIsWalking(false);
@@ -450,7 +449,7 @@ const LiveFeed = () => {
                 <section className="grid md:grid-cols-2 xl:grid-cols-1 xl:grid-rows-1 xl:grid-flow-col gap-6">
                     <div className="flex flex-col md:col-span-2 md:row-span-2 bg-white shadow rounded-lg">
                         <div className="px-6 py-5 font-semibold border-b border-gray-100">
-                            Activity chart (last 5 minutes)
+                            Step chart (last 5 minutes)
                         </div>
                         <div className="p-4 flex-grow">
                             <div className="flex items-center justify-center h-full px-4 py-16 text-gray-400 text-3xl font-semibold bg-white border-2 border-gray-200 border-dashed rounded-md">
@@ -459,7 +458,7 @@ const LiveFeed = () => {
                                         display: !apiRead ? "block" : "none",
                                     }}
                                 >
-                                    Loading activity chart...
+                                    Loading step chart...
                                 </span>
                                 <canvas
                                     id="myChart"
