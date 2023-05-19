@@ -116,7 +116,7 @@ const handleActivityData = (data, height, weight) => {
         let speed = (activity.steps * stride) / 2;
         let distance = speed * 2;
         let calories = (speed * weight) / 400;
-        let datetime = new Date(activity.time);
+        let datetime = new Date(activity.time + " UTC");
         if (activity_object.start != null) {
             // If within 5 minutes -> count as same activity
             if (datetime - activity_object.last_end < 300_000) {

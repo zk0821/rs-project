@@ -7,26 +7,25 @@ import { FaRunning } from "react-icons/fa";
 import { IoBicycle } from "react-icons/io5";
 import { TbSofa } from "react-icons/tb";
 
-const countActivityPerDates = (activities, dates, array_count) => {
+const countActivityPerDates = (
+    activities,
+    dates,
+    array_count,
+    date_distance_in_seconds
+) => {
     let arr = [];
     for (let i = 0; i < array_count; i++) {
         arr.push(0);
     }
-    activities.all.forEach((activity) => {
-        let activity_start = new Date(activity.start);
+    activities.forEach((activity) => {
+        let activity_start = new Date(activity.time + " UTC");
         for (let i = 0; i < dates.length; i++) {
             let curr_date_object = new Date(dates[i]);
-            let date = curr_date_object.getDate();
-            let hours = curr_date_object.getHours();
-            let minutes = curr_date_object.getMinutes();
-            let seconds = curr_date_object.getSeconds();
             if (
-                activity_start.getDate() - date == 0 &&
-                activity_start.getHours() - hours == 0 &&
-                activity_start.getMinutes() - minutes == 0 &&
-                activity_start.getSeconds() - seconds <= 10
+                differenceBetweenDates(activity_start, curr_date_object) <
+                date_distance_in_seconds
             ) {
-                arr[i] += activity.total_num_steps;
+                arr[i] += 1;
             }
         }
     });
@@ -34,16 +33,37 @@ const countActivityPerDates = (activities, dates, array_count) => {
 };
 
 const createStepChart = (walking, running, cycling) => {
+    let date_distance_in_seconds = 10;
     let dates = [];
-    const date = new Date();
+    let date = new Date();
+    let full_dates = [];
     for (let i = 0; i < 30; i++) {
+        full_dates.push(date);
         dates.push(date.toLocaleTimeString());
-        date.setSeconds(date.getSeconds() - 10);
+        date = new Date(
+            date.setSeconds(date.getSeconds() - date_distance_in_seconds)
+        );
     }
+    full_dates = full_dates.reverse();
     dates = dates.reverse();
-    let walking_data = countActivityPerDates(walking, dates, 30);
-    let running_data = countActivityPerDates(running, dates, 30);
-    let cycling_data = countActivityPerDates(cycling, dates, 30);
+    let walking_data = countActivityPerDates(
+        walking,
+        full_dates,
+        30,
+        date_distance_in_seconds
+    );
+    let running_data = countActivityPerDates(
+        running,
+        full_dates,
+        30,
+        date_distance_in_seconds
+    );
+    let cycling_data = countActivityPerDates(
+        cycling,
+        full_dates,
+        30,
+        date_distance_in_seconds
+    );
 
     var el = document.getElementById("myChart");
     if (el) {
@@ -81,17 +101,20 @@ const createStepChart = (walking, running, cycling) => {
 };
 
 const differenceBetweenDates = (date_a, date_b) => {
-    return Math.abs(date_a - date_b) / 1000;
+    let diff = Math.abs(date_a - date_b) / 1000;
+    return diff;
 };
 
 /* 0 - Idle, 1 - Walking, 2 - Running, 3 - Cycling */
 const findLatestActivity = (walking, running, cycling) => {
+    let chart_length_in_seconds = 30 * 10;
     let current_date = new Date();
     let walking_date = null;
     walking.all.forEach((walk) => {
-        let walk_datetime = new Date(walk.start);
+        let walk_datetime = new Date(walk.last_end);
         if (
-            differenceBetweenDates(current_date, walk_datetime) <= 300 &&
+            differenceBetweenDates(current_date, walk_datetime) <=
+                chart_length_in_seconds &&
             (walking_date == null || walk_datetime - walking_date > 0)
         ) {
             walking_date = walk_datetime;
@@ -101,7 +124,8 @@ const findLatestActivity = (walking, running, cycling) => {
     running.all.forEach((run) => {
         let run_datetime = new Date(run.start);
         if (
-            differenceBetweenDates(current_date, run_datetime) <= 300 &&
+            differenceBetweenDates(current_date, run_datetime) <=
+                chart_length_in_seconds &&
             (running_date == null || run_datetime - running_date > 0)
         ) {
             running_date = run_datetime;
@@ -111,7 +135,8 @@ const findLatestActivity = (walking, running, cycling) => {
     cycling.all.forEach((cycling) => {
         let cycling_datetime = new Date(cycling.start);
         if (
-            differenceBetweenDates(current_date, cycling_datetime) <= 300 &&
+            differenceBetweenDates(current_date, cycling_datetime) <=
+                chart_length_in_seconds &&
             (cycling_date == null || cycling_datetime - cycling_date > 0)
         ) {
             cycling_date = cycling_datetime;
@@ -170,7 +195,7 @@ const handleActivityData = (data) => {
         last_end: null,
     };
     data.forEach((activity) => {
-        let datetime = new Date(activity.time);
+        let datetime = new Date(activity.time + " UTC");
         if (activity_object.start != null) {
             // If within 5 minutes -> count as same activity
             if (datetime - activity_object.last_end < 300_000) {
@@ -228,29 +253,36 @@ const LiveFeed = () => {
                 { method: "GET" }
             );
             const json = await result.json();
+            console.log(json);
             // Walking
             let walking_object;
+            let walking = [];
             if (json.walking) {
                 walking_object = handleActivityData(json.walking);
+                walking = json.walking;
             } else {
                 walking_object = createEmptyActivityObject();
             }
             // Running
             let running_object;
+            let running = [];
             if (json.running) {
                 running_object = handleActivityData(json.running);
+                running = json.running;
             } else {
                 running_object = createEmptyActivityObject();
             }
             // Cycling
             let cycling_object;
+            let cycling = [];
             if (json.cycling) {
                 cycling_object = handleActivityData(json.cycling);
+                cycling = json.cycling;
             } else {
                 cycling_object = createEmptyActivityObject();
             }
             /* Chart */
-            createStepChart(walking_object, running_object, cycling_object);
+            createStepChart(walking, running, cycling);
             /* Activity data */
             setActivityData({
                 walking: walking_object,

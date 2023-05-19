@@ -49,7 +49,7 @@ const handleActivityData = (data, height, weight) => {
         let speed = (activity.steps * stride) / 2;
         let distance = speed * 2;
         let calories = (speed * weight) / 400;
-        let datetime = new Date(activity.time);
+        let datetime = new Date(activity.time + " UTC");
         if (activity_object.start != null) {
             // If within 5 minutes -> count as same activity
             if (datetime - activity_object.last_end < 300_000) {
@@ -325,23 +325,23 @@ const Dashboard = () => {
                     <h1 className="text-xl font-semibold mb-2">Walking</h1>
                 </div>
                 <section className="grid md:grid-cols-1 xl:grid-cols-1 gap-6">
-                    <div class="relative overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <div className="relative overflow-x-auto">
+                        <table className="w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Activity Start
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Activity End
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Total number of steps
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Total calories
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Total distance
                                     </th>
                                 </tr>
@@ -349,10 +349,14 @@ const Dashboard = () => {
                             <tbody>
                                 {activityData.walking.all.map((walk, index) => {
                                     return (
-                                        <tr class="bg-white border-b">
+                                        <tr
+                                            key={index + "10"}
+                                            className="bg-white border-b"
+                                        >
                                             <th
+                                                key={index + "11"}
                                                 scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                             >
                                                 {walk.start.toLocaleDateString(
                                                     "sl-SI"
@@ -361,7 +365,10 @@ const Dashboard = () => {
                                                     "sl-SI"
                                                 )}
                                             </th>
-                                            <td class="px-6 py-4">
+                                            <td
+                                                key={index + "12"}
+                                                className="px-6 py-4"
+                                            >
                                                 {walk.last_end.toLocaleDateString(
                                                     "sl-SI"
                                                 )}{" "}
@@ -369,13 +376,22 @@ const Dashboard = () => {
                                                     "sl-SI"
                                                 )}
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td
+                                                key={index + "13"}
+                                                className="px-6 py-4"
+                                            >
                                                 {walk.total_num_steps}
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td
+                                                key={index + "14"}
+                                                className="px-6 py-4"
+                                            >
                                                 {walk.calories.toFixed(2)} kcal
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td
+                                                key={index + "15"}
+                                                className="px-6 py-4"
+                                            >
                                                 {walk.distance.toFixed(2)} m
                                             </td>
                                         </tr>
@@ -392,23 +408,23 @@ const Dashboard = () => {
                     <h1 className="text-xl font-semibold mb-2">Running</h1>
                 </div>
                 <section className="grid md:grid-cols-1 xl:grid-cols-1 gap-6">
-                    <div class="relative overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <div className="relative overflow-x-auto">
+                        <table className="w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Activity Start
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Activity End
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Total number of steps
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Total calories
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Total distance
                                     </th>
                                 </tr>
@@ -416,10 +432,14 @@ const Dashboard = () => {
                             <tbody>
                                 {activityData.running.all.map((run, index) => {
                                     return (
-                                        <tr class="bg-white border-b">
+                                        <tr
+                                            key={index + "20"}
+                                            className="bg-white border-b"
+                                        >
                                             <th
+                                                key={index + "21"}
                                                 scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                             >
                                                 {run.start.toLocaleDateString(
                                                     "sl-SI"
@@ -428,7 +448,10 @@ const Dashboard = () => {
                                                     "sl-SI"
                                                 )}
                                             </th>
-                                            <td class="px-6 py-4">
+                                            <td
+                                                key={index + "22"}
+                                                className="px-6 py-4"
+                                            >
                                                 {run.last_end.toLocaleDateString(
                                                     "sl-SI"
                                                 )}{" "}
@@ -436,13 +459,22 @@ const Dashboard = () => {
                                                     "sl-SI"
                                                 )}
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td
+                                                key={index + "23"}
+                                                className="px-6 py-4"
+                                            >
                                                 {run.total_num_steps}
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td
+                                                key={index + "24"}
+                                                className="px-6 py-4"
+                                            >
                                                 {run.calories.toFixed(2)} kcal
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td
+                                                key={index + "25"}
+                                                className="px-6 py-4"
+                                            >
                                                 {run.distance.toFixed(2)} m
                                             </td>
                                         </tr>
@@ -459,23 +491,23 @@ const Dashboard = () => {
                     <h1 className="text-xl font-semibold mb-2">Cycling</h1>
                 </div>
                 <section className="grid md:grid-cols-1 xl:grid-cols-1 gap-6">
-                    <div class="relative overflow-x-auto">
-                        <table class="w-full text-sm text-left text-gray-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <div className="relative overflow-x-auto">
+                        <table className="w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Activity Start
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Activity End
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Total number of steps
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Total calories
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3">
                                         Total distance
                                     </th>
                                 </tr>
@@ -484,10 +516,14 @@ const Dashboard = () => {
                                 {activityData.cycling.all.map(
                                     (cycling, index) => {
                                         return (
-                                            <tr class="bg-white border-b">
+                                            <tr
+                                                key={index + "30"}
+                                                className="bg-white border-b"
+                                            >
                                                 <th
+                                                    key={index + "31"}
                                                     scope="row"
-                                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                                 >
                                                     {cycling.start.toLocaleDateString(
                                                         "sl-SI"
@@ -496,7 +532,10 @@ const Dashboard = () => {
                                                         "sl-SI"
                                                     )}
                                                 </th>
-                                                <td class="px-6 py-4">
+                                                <td
+                                                    key={index + "32"}
+                                                    className="px-6 py-4"
+                                                >
                                                     {cycling.last_end.toLocaleDateString(
                                                         "sl-SI"
                                                     )}{" "}
@@ -504,16 +543,25 @@ const Dashboard = () => {
                                                         "sl-SI"
                                                     )}
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td
+                                                    key={index + "33"}
+                                                    className="px-6 py-4"
+                                                >
                                                     {cycling.total_num_steps}
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td
+                                                    key={index + "34"}
+                                                    className="px-6 py-4"
+                                                >
                                                     {cycling.calories.toFixed(
                                                         2
                                                     )}{" "}
                                                     kcal
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td
+                                                    key={index + "35"}
+                                                    className="px-6 py-4"
+                                                >
                                                     {cycling.distance.toFixed(
                                                         2
                                                     )}{" "}
