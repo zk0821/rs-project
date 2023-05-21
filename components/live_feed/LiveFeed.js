@@ -25,7 +25,7 @@ const countActivityPerDates = (
                 differenceBetweenDates(activity_start, curr_date_object) <
                 date_distance_in_seconds
             ) {
-                arr[i] += 1;
+                arr[i] += activity.steps;
             }
         }
     });
