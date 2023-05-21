@@ -122,7 +122,7 @@ const findLatestActivity = (walking, running, cycling) => {
     });
     let running_date = null;
     running.all.forEach((run) => {
-        let run_datetime = new Date(run.start);
+        let run_datetime = new Date(run.last_end);
         if (
             differenceBetweenDates(current_date, run_datetime) <=
                 chart_length_in_seconds &&
@@ -133,7 +133,7 @@ const findLatestActivity = (walking, running, cycling) => {
     });
     let cycling_date = null;
     cycling.all.forEach((cycling) => {
-        let cycling_datetime = new Date(cycling.start);
+        let cycling_datetime = new Date(cycling.last_end);
         if (
             differenceBetweenDates(current_date, cycling_datetime) <=
                 chart_length_in_seconds &&
